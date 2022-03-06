@@ -26,10 +26,10 @@ public class IntListImpl implements IntList {
                 return item;
             }
         }
-        Integer[] newArr = new Integer[size +1];
+        Integer[] newArr = new Integer[size + 1];
         System.arraycopy(arr, 0, newArr, 0, arr.length);
         arr = newArr;
-        for (int i = 0; i < arr.length ; i++) {
+        for (int i = 0; i < arr.length; i++) {
             if (arr[i] == null) {
                 arr[i] = item;
                 size++;
@@ -49,7 +49,7 @@ public class IntListImpl implements IntList {
             size++;
         }
         if (index >= arr.length) {
-            Integer[] newArr = new Integer[index+1];
+            Integer[] newArr = new Integer[index + 1];
             System.arraycopy(arr, 0, newArr, 0, arr.length);
             arr = newArr;
             arr[index] = item;
@@ -131,8 +131,18 @@ public class IntListImpl implements IntList {
             throw new EmptyParameterException("Объект не задан");
         }
         if (size >= 2) {
-            sort(arr);
+            Integer[] sortedArr = new Integer[arr.length];
+            System.arraycopy(arr, 0, sortedArr, 0, arr.length);
+            sort(sortedArr);
+            return containsElement(sortedArr, item);
         }
+        if (arr[0].equals(item))
+            return true;
+        else return false;
+
+    }
+
+    private boolean containsElement(Integer[] arr, Integer item) {
         int min = 0;
         int max = arr.length - 1;
         while (min <= max) {
@@ -148,7 +158,6 @@ public class IntListImpl implements IntList {
             }
         }
         return false;
-
     }
 
     @Override

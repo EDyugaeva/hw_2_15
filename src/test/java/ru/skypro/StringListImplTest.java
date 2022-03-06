@@ -132,18 +132,18 @@ public class StringListImplTest {
     @Test
     public void testContainElement() {
         out.add(ONE);
-        out.add(TWO);
-        out.add(THREE);
-        out.add(MINUSONE);
-        out.add(ZERO);
-
-        Assertions.assertTrue(out.contains(MINUSONE));
         Assertions.assertTrue(out.contains(ONE));
-        Assertions.assertTrue(out.contains(THREE));
+        out.add(TWO);
         Assertions.assertTrue(out.contains(TWO));
+        out.add(THREE);
+        Assertions.assertTrue(out.contains(THREE));
+        out.add(ZERO);
         Assertions.assertTrue(out.contains(ZERO));
+        out.add(MINUSONE);
+        Assertions.assertTrue(out.contains(MINUSONE));
 
         Assertions.assertFalse(out.contains(-100));
+
 
     }
 
