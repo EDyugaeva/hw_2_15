@@ -1,11 +1,13 @@
 package ru.skypro;
 
+import java.util.Arrays;
+
 public class Main {
 
     public static void main(String[] args) {
         int[] arr1 = generateRandomArray();
-        int[] arr2 = generateRandomArray();
-        int[] arr3 = generateRandomArray();
+        int[] arr2 = Arrays.copyOf(arr1, 100_000);
+        int[] arr3 = Arrays.copyOf(arr1, 100_000);
         long start1 = System.currentTimeMillis();
         sortBubble(arr1);
         System.out.println(System.currentTimeMillis() - start1);

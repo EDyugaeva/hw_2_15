@@ -8,9 +8,14 @@ import ru.skypro.exceptions.MissingNumberException;
 public class IntListImpl implements IntList {
     public int size;
     public Integer[] arr;
+    public int startLength = 4;
 
     public IntListImpl() {
-        this.arr = new Integer[4];
+        this.arr = new Integer[startLength];
+    }
+
+    public IntListImpl(int length) {
+        this.arr = new Integer[length];
     }
 
     @Override
@@ -18,7 +23,6 @@ public class IntListImpl implements IntList {
         if (item == null) {
             throw new EmptyParameterException("Объект не задан");
         }
-
         for (int i = 0; i < arr.length; i++) {
             if (arr[i] == null) {
                 arr[i] = item;
@@ -26,42 +30,35 @@ public class IntListImpl implements IntList {
                 return item;
             }
         }
-        Integer[] newArr = new Integer[size + 1];
+
+        extendArr();
+        arr[size] = item;
+        size++;
+        return item;
+    }
+
+    public void extendArr() {
+        Integer[] newArr = new Integer[size * 2];
         System.arraycopy(arr, 0, newArr, 0, arr.length);
         arr = newArr;
-        for (int i = 0; i < arr.length; i++) {
-            if (arr[i] == null) {
-                arr[i] = item;
-                size++;
-                break;
-            }
-        }
-        return item;
     }
 
     @Override
     public Integer add(int index, Integer item) {
-        if (item == null || index < 0) {
+        if (item == null || index < 0 || index > size-1) {
             throw new EmptyParameterException("Объект не задан или задан не верно");
         }
-        if (index < arr.length) {
-            arr[index] = item;
-            size++;
-        }
-        if (index >= arr.length) {
-            Integer[] newArr = new Integer[index + 1];
-            System.arraycopy(arr, 0, newArr, 0, arr.length);
-            arr = newArr;
-            arr[index] = item;
-            size++;
+
+        if (index == arr.length-1) {
+            extendArr();
         }
 
-        for (int i = index; i > 0; i--) {
-            if (arr[i] != null && arr[i - 1] == null) {
-                arr[i - 1] = arr[i];
-                arr[i] = null;
-            }
+        for (int j = size; j > index; j--) {
+            arr[j] = arr[j-1];
         }
+
+        arr[index] = item;
+        size++;
         return item;
     }
 
@@ -71,7 +68,7 @@ public class IntListImpl implements IntList {
         if (item == null || index < 0) {
             throw new EmptyParameterException("Объект не задан или задан не верно");
         }
-        if (index - 1 > size) {
+        if (index - 1 >= size) {
             throw new MissingNumberException("Нет элемента с таким номером");
         }
         arr[index] = item;
@@ -83,18 +80,17 @@ public class IntListImpl implements IntList {
         if (item == null) {
             throw new EmptyParameterException("Объект не задан");
         }
+        int index;
         boolean found = false;
         for (int i = 0; i < size; i++) {
             if (arr[i].equals(item)) {
                 found = true;
                 arr[i] = null;
                 size--;
-            }
-        }
-        for (int j = 0; j < size; j++) {
-            if (arr[j] == null) {
-                arr[j] = arr[j + 1];
-                arr[j + 1] = null;
+                index = i;
+                for (int j = index; j < size; j++) {
+                    arr[j] = arr[j + 1];
+                }
             }
         }
         if (!found) {
@@ -127,6 +123,9 @@ public class IntListImpl implements IntList {
 
     @Override
     public boolean contains(Integer item) {
+        if (arr[0] == null) {
+            throw new EmptyParameterException("Лист пустой");
+        }
         if (item == null) {
             throw new EmptyParameterException("Объект не задан");
         }

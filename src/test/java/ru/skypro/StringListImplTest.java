@@ -43,32 +43,48 @@ public class StringListImplTest {
 
     @Test
     public void testAddSmthIndex() {
-        Assertions.assertEquals(ONE, out.add(1, ONE));
+        out.add(FOUR);
+
+        Assertions.assertEquals(ONE, out.add(0, ONE));
         Assertions.assertEquals(ONE, out.get(0));
-        Assertions.assertEquals(1, out.size);
-
-
-        Assertions.assertEquals(TWO, out.add(2, TWO));
-        Assertions.assertEquals(TWO, out.get(1));
+        Assertions.assertEquals(FOUR, out.get(1));
         Assertions.assertEquals(2, out.size);
 
-        Assertions.assertEquals(THREE, out.add(4, THREE));
-        Assertions.assertEquals(THREE, out.get(2));
+
+        Assertions.assertEquals(TWO, out.add(1, TWO));
+        Assertions.assertEquals(TWO, out.get(1));
+        Assertions.assertEquals(FOUR, out.get(2));
         Assertions.assertEquals(3, out.size);
 
-        Assertions.assertEquals(ZERO, out.add(8, ZERO));
-        Assertions.assertEquals(ZERO, out.get(3));
+        Assertions.assertEquals(THREE, out.add(2, THREE));
+        Assertions.assertEquals(THREE, out.get(2));
+        Assertions.assertEquals(FOUR, out.get(3));
         Assertions.assertEquals(4, out.size);
 
-        Assertions.assertEquals(MINUSONE, out.add(10, MINUSONE));
-        Assertions.assertEquals(MINUSONE, out.get(4));
+        Assertions.assertEquals(ZERO, out.add(3, ZERO));
+        Assertions.assertEquals(ZERO, out.get(3));
+        Assertions.assertEquals(FOUR, out.get(4));
         Assertions.assertEquals(5, out.size);
+
+        Assertions.assertEquals(MINUSONE, out.add(4, MINUSONE));
+        Assertions.assertEquals(MINUSONE, out.get(4));
+        Assertions.assertEquals(FOUR, out.get(5));
+        Assertions.assertEquals(6, out.size);
+
+        Assertions.assertEquals(FIVE, out.add(4, FIVE));
+        Assertions.assertEquals(FIVE, out.get(4));
+        Assertions.assertEquals(MINUSONE, out.get(5));
+        Assertions.assertEquals(FOUR, out.get(6));
+        Assertions.assertEquals(7, out.size);
     }
 
     @Test
     public void testExceptionWhenAddingNullElementWithIndex() {
-        Assertions.assertThrows(EmptyParameterException.class, () -> out.add(4, null));
-        Assertions.assertThrows(EmptyParameterException.class, () -> out.add(-1, ONE));
+        out.add(ONE);
+        Assertions.assertThrows(EmptyParameterException.class, () -> out.add(0, null));
+        Assertions.assertThrows(EmptyParameterException.class, () -> out.add(-1, TWO));
+        Assertions.assertThrows(EmptyParameterException.class, () -> out.add(1, THREE));
+
     }
 
     @Test
@@ -149,6 +165,8 @@ public class StringListImplTest {
 
     @Test
     public void testExceptionWhenFindEmptyElement() {
+        Assertions.assertThrows(EmptyParameterException.class, () -> out.contains(ONE));
+        out.add(ONE);
         Assertions.assertThrows(EmptyParameterException.class, () -> out.contains(null));
 
     }
@@ -256,11 +274,11 @@ public class StringListImplTest {
         out.add(TWO);
         out.add(THREE);
         Integer[] expected = new Integer[3];
-        expected[0]=ONE;
-        expected[1]=TWO;
-        expected[2]=THREE;
+        expected[0] = ONE;
+        expected[1] = TWO;
+        expected[2] = THREE;
         Assertions.assertEquals(3, out.toArray().length);
-        Assertions.assertArrayEquals(expected,out.toArray());
+        Assertions.assertArrayEquals(expected, out.toArray());
 
     }
 
