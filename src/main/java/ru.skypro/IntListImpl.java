@@ -31,14 +31,14 @@ public class IntListImpl implements IntList {
             }
         }
 
-        extendArr();
+        grow();
         arr[size] = item;
         size++;
         return item;
     }
 
-    public void extendArr() {
-        Integer[] newArr = new Integer[size * 2];
+    private void grow() {
+        Integer[] newArr = new Integer[(int) ( size * 1.5)];
         System.arraycopy(arr, 0, newArr, 0, arr.length);
         arr = newArr;
     }
@@ -49,8 +49,8 @@ public class IntListImpl implements IntList {
             throw new EmptyParameterException("Объект не задан или задан не верно");
         }
 
-        if (index == arr.length-1) {
-            extendArr();
+        if (index+1 >= arr.length-1) {
+            grow();
         }
 
         for (int j = size; j > index; j--) {
@@ -130,10 +130,10 @@ public class IntListImpl implements IntList {
             throw new EmptyParameterException("Объект не задан");
         }
         if (size >= 2) {
-            Integer[] sortedArr = new Integer[arr.length];
-            System.arraycopy(arr, 0, sortedArr, 0, arr.length);
-            sort(sortedArr);
-            return containsElement(sortedArr, item);
+            Integer[] sortingArr = new Integer[arr.length];
+            System.arraycopy(arr, 0, sortingArr, 0, arr.length);
+           sort(sortingArr,0,size-1);
+            return containsElement(sortingArr, item);
         }
         if (arr[0].equals(item))
             return true;
@@ -143,7 +143,7 @@ public class IntListImpl implements IntList {
 
     private boolean containsElement(Integer[] arr, Integer item) {
         int min = 0;
-        int max = arr.length - 1;
+        int max = size - 1;
         while (min <= max) {
             int mid = (min + max) / 2;
             if (item.equals(arr[mid])) {
@@ -236,16 +236,32 @@ public class IntListImpl implements IntList {
         return result;
     }
 
-    private void sort(Integer[] arr) {
-        for (int i = 1; i < size; i++) {
-            int temp = arr[i];
-            int j = i;
-            while (j > 0 && arr[j - 1] >= temp) {
-                arr[j] = arr[j - 1];
-                j--;
-            }
-            arr[j] = temp;
+
+    private void swapElements(Integer[] arr, int left, int right) {
+        int temp = arr[left];
+        arr[left] = arr[right];
+        arr[right] = temp;
+    }
+
+    public void sort(Integer[] arr, int begin, int end) {
+        if (begin < end) {
+            int partitionIndex = partition(arr, begin, end);
+            sort(arr, begin, partitionIndex - 1);
+            sort(arr, partitionIndex + 1, end);
         }
+    }
+
+    private int partition(Integer[] arr, int begin, int end) {
+        int pivot = arr[end];
+        int i = (begin - 1);
+        for (int j = begin; j < end; j++) {
+            if (arr[j] <= pivot) {
+                i++;
+                swapElements(arr, i, j);
+            }
+        }
+        swapElements(arr, i + 1, end);
+        return i + 1;
     }
 
 
